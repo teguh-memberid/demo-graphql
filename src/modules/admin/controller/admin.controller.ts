@@ -30,7 +30,6 @@ export class AdminController {
             updatedBy: 1
         })
         const statusSave = await this.adminService.save(dataAdmin)
-        console.log(statusSave)
         return {
             id: 1,
             status: true,

@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { AdminQueryResponse } from '../dtos/admin.objectType'
 import { AdminService } from '../admin.service'
 import { AdminModel } from './../models/admin.model'
@@ -10,29 +10,33 @@ export class AdminResolver {
 
     @Query(returns => AdminModel)
     async admin(@Args('id') id: string): Promise<AdminModel>{
-        const data = await this.adminService.findAll()
-        const resp = data.data.map(row => {
-            return {
-                name: row.toListJSON().name,
-                username: row.toListJSON().username
-            }
-        })
-
-        return resp;
+        
+        const data = (await this.adminService.findOne(parseInt(id))).toJson()
+        
+        return {
+            name: data.name,
+            username: data.username
+        }
     }
-
     @Query(returns => [AdminModel])
-    async recipes(@Args() adminArgs: AdminArgs): Promise<AdminModel[]> {
+    async adminList(@Args() adminArgs: AdminArgs): Promise<AdminModel[]> {
+        console.log(adminArgs)
+
         const data = [{
-            id: '2',
-            title: 'Title',
+            name: 'Teguh',
+            username: 'Title',
             description: 'Description title'
         },{
-            id: '2',
-            title: 'Title',
+            name: 'Hadi',
+            username: 'Title',
             description: 'Description title'
         }]
 
         return data;
     }
+
+    // @Mutation(()=>)
+    // async createAdmin(){
+
+    // }
 }

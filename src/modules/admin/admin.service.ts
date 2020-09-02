@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { AdminEntity } from './entities/admin.entity'
 import { AdminDomain } from './domain/admin.domain'
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, throwError } from 'rxjs';
 
 
 interface ResponseService {
@@ -49,7 +49,12 @@ export class AdminService {
         }
     }
 
-    async findOne(id: Number): Promise<DetailAdmin>{
-
-    }
+    async findOne(id: number): Promise<AdminDomain>{
+        const detailadmin = await this.repo.findOne({where: {id:id}})
+        if(detailadmin === undefined) throw new BadRequestException('Not found')
+        const admin = new AdminDomain()
+        admin.fromJSON(detailadmin)
+    
+        return admin
+    }   
 }

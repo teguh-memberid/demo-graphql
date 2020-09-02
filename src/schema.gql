@@ -3,12 +3,12 @@
 # ------------------------------------------------------
 
 type AdminModel {
-  id: ID!
-  title: String!
+  name: String!
+  username: String!
   description: String
 }
 
 type Query {
   admin(id: String!): AdminModel!
-  recipes(skip: Int = 0, take: Int = 25): [AdminModel!]!
+  adminList(skip: Int = 0, take: Int = 25): [AdminModel!]!
 }
